@@ -35,8 +35,8 @@ public class AddUsers extends AppCompatActivity {
         Intent intent = getIntent();
         city = intent.getStringExtra("tn");
         city = "Trip to "+ city;
-        user = FirebaseAuth.getInstance().getCurrentUser().getEmail().toString();
-        Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
+        user = Globe.getInstance().user.toString();
+       // Toast.makeText(getApplicationContext(), "hello", Toast.LENGTH_SHORT).show();
         trip.setText(city);
         list = new ArrayList<String>();
         names = new ArrayList<String>();
@@ -46,7 +46,7 @@ public class AddUsers extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot s : snapshot.getChildren()){
                     String kl = s.getValue().toString();
-                    if(names.contains(kl)==false)
+                    if(names.contains(kl)==false&&!user.equals(kl)) //checks for current user and duplicate emails
                     {
                         names.add(s.getValue().toString());
                         ly.addView(create(kl, names.size()-1));
@@ -67,21 +67,35 @@ public class AddUsers extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseDatabase.getInstance().getReference()
-                        .child(city).child("max").setValue(new Pair(user, 0));
-
-                FirebaseDatabase.getInstance().getReference()
-                        .child(city).child("min").setValue(new Pair(user, 0));
-
-                FirebaseDatabase.getInstance().getReference()
                         .child(city).child("total").setValue(0);
 
                 FirebaseDatabase.getInstance().getReference()
-                        .child(city).child("credit").setValue(0);
+                        .child(city).child("Members").setValue(list.size()+1); //tracking members +1 for current user
+
+
+                for(String i:list){
+                    FirebaseDatabase.getInstance().getReference().child("Groups").child(pure(i)).child(city).setValue(0);
+
+                }
+                FirebaseDatabase.getInstance().getReference().child("Groups").child(pure(user)).child(city).setValue(0);
 
                 Intent it = new Intent(getApplicationContext(),Expense.class);
+                it.putExtra("nc", city);
                 startActivity(it);
             }
         });
+    }
+
+    public String pure(String op){
+        String kl = "";
+        for(int i=0; i<op.length();i++) {
+            if (op.charAt(i) != '@') {
+                kl += op.charAt(i);
+            } else {
+                break;
+            }
+        }
+        return kl;
     }
 
     public LinearLayout space() {

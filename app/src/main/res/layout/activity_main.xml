@@ -8,6 +8,21 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/groups"
+        android:layout_width="274dp"
+        android:layout_height="81dp"
+        android:backgroundTint="#24AF8F"
+        android:text="Groups"
+        android:textSize="18sp"
+        app:iconTint="#F3F0F0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcome"
+        app:layout_constraintVertical_bias="0.045" />
+
+    <Button
         android:id="@+id/sOut"
         android:layout_width="252dp"
         android:layout_height="68dp"
@@ -35,7 +50,7 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome"
-        app:layout_constraintVertical_bias="0.197" />
+        app:layout_constraintVertical_bias="0.283" />
 
     <TextView
         android:id="@+id/welcome"
