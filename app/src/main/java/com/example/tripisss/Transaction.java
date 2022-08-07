@@ -9,17 +9,41 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class Transaction {
-    public String name;
-    public String amt;
-    public String time;
+    private String name;
+    private String amt;
+    private String time;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    Transaction(String x, String y){
+    public Transaction() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAmt() {
+        return amt;
+    }
+
+    public void setAmt(String amt) {
+        this.amt = amt;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    Transaction(String x, String y, String z){
         name =x;
         amt = y;
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        time = dtf.format(now).toString();
+        time = z;
     }
 
 }

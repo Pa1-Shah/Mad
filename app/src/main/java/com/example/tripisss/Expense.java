@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,7 +23,7 @@ public class Expense extends AppCompatActivity {
     LinearLayout newl;
     public String city;
     TextView tot, leftTopay,cityText;
-    Button btn;
+    Button btn,loc_btn;
     double total,paid;
     int members;
     @Override
@@ -37,6 +36,16 @@ public class Expense extends AppCompatActivity {
         total = 0.0; paid = 0.0; members = 1;
         cityText = findViewById(R.id.cityT);
         cityText.setText(city);
+
+        loc_btn = findViewById(R.id.find_loc);
+        loc_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapX = new Intent(getApplicationContext(),MapsActivity.class);
+                startActivity(mapX);
+            }
+        });
+
         btn = findViewById(R.id.pressPay);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +65,8 @@ public class Expense extends AppCompatActivity {
                 String un=snapshot.getValue().toString();
                 tot.setText(un);
                 total = Double.parseDouble(un);
+                double left = (total/members)-paid;
+                leftTopay.setText(String.valueOf(left));
             }
 
             @Override
@@ -68,6 +79,8 @@ public class Expense extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String un = snapshot.getValue().toString();
                 members = Integer.parseInt(un);
+                double left = (total/members)-paid;
+                leftTopay.setText(String.valueOf(left));
 
             }
 
@@ -95,12 +108,13 @@ public class Expense extends AppCompatActivity {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             for(DataSnapshot s:snapshot.getChildren()){
-                // Transaction tr = s.getValue(Transaction.class);
-//                String his = tr.name+"  ";
-//                his+=tr.amt+"  ";
-//                his+=tr.time;
-//                newl.addView(create(s.getValue().toString(),-1));
-//                newl.addView(space());
+                      Transaction tr = s.getValue(Transaction.class);
+                      String his = tr.getName()+"  ";
+                      his+="+"+tr.getAmt()+"   ";
+                      his+=tr.getTime();
+                      newl.addView(create(his,-1));
+                      newl.addView(space());
+
 
             }
         }

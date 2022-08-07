@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Payment extends AppCompatActivity {
     TextView group;
     EditText amount;
@@ -39,8 +42,12 @@ public class Payment extends AppCompatActivity {
                 double curr = Double.parseDouble(kl);
                 total+=curr;
                 paid+=curr;
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                LocalDateTime now = LocalDateTime.now();
+                String time = dtf.format(now).toString();
+                Transaction tr = new Transaction(Globe.getInstance().user, kl,time);
                 FirebaseDatabase.getInstance().getReference().child(city).child("History")
-                        .push().setValue(new Transaction(Globe.getInstance().user, kl));
+                        .push().setValue(tr);
                 FirebaseDatabase.getInstance().getReference().child(city).child("total").setValue(total);
                 FirebaseDatabase.getInstance().getReference().child("Groups").child(pure(Globe.getInstance().user)).child(city).setValue(paid);
                 Intent x = new Intent(getApplicationContext(),Expense.class);
